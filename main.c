@@ -7,7 +7,7 @@
 #include "image.h"
 #include "io.h"
 #include "fortune.h"
-
+#include "heap.h"
 
 int
 main (int argc, char* argv[]) {
