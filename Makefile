@@ -1,25 +1,13 @@
+NAME = voronoi
+include common.mk
 
-CC = clang
-CFLAGS = -std=c99
-LDFLAGS = 
-
-# GTK
 LDFLAGS += $(shell pkg-config --cflags --libs gtk+-3.0)
+CFLAGS += 
+DEPENDENCIES +=
 
-SOURCES = $(wildcard *.c)
-EXECUTABLE = voronoi
-OBJECTS = $(SOURCES:.c=.o)
-CRUFT = $(OBJECTS) + $(EXECUTABLE)
+clean::
+	@make -C tests clean
 
-all: $(EXECUTABLE)
-
-$(EXECUTABLE): $(OBJECTS)
-	@$(CC) $(OBJECTS) -o $(EXECUTABLE) $(LDFLAGS)
-
-$(OBJECTS): %.o: %.c
-	@$(CC) -c $(CFLAGS) $< -o $@ $(LDFLAGS)
-
-clean:
-	@rm -f $(CRUFT)
-
-all:
+test: all
+	@make -C tests
+	@tests/test
