@@ -5,6 +5,7 @@
 #include "geometry.h"
 #include "image.h"
 #include "io.h"
+#include "heap.h"
 
 void fortune(Inputs* inputs, Image* image);
 

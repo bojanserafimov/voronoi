@@ -6,17 +6,23 @@
 #include "assert.h"
 #include "stdio.h"
 
-typedef int data_t;
+typedef struct {
+    double x;
+    double y;
+} Event;
 
 typedef struct {
     int length;
     int length_max;
-    data_t* data;
+    Event* data;
+    int* perm;
 } Heap;
 
 Heap* new_heap(int length_max);
-void heap_insert(data_t element, Heap* heap);
-data_t heap_get_top(Heap* heap);
+void free_heap(Heap* heap);
+
+void heap_insert(Event element, Heap* heap);
+Event heap_get_top(Heap* heap);
 void heap_pop(Heap* heap);
 
 #endif // VORONOI_HEAP_C
