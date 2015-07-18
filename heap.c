@@ -7,34 +7,21 @@ int compare_event(const void* a, const void* b) {
     return ((Event*)a)->y - ((Event*)b)->y;
 }
 
-static inline int 
-less(int a, int b, Heap* heap) {
-    if (heap->data[heap->perm[a]].x < heap->data[heap->perm[b]].x) return 1;
-    if (heap->data[heap->perm[a]].y < heap->data[heap->perm[b]].y) return 1;
-    return 0;
-}
-
-static inline void
-swap(int a, int b, Heap* heap) {
-    int tmp = heap->perm[a];
-    heap->perm[a] = heap->perm[b];
-    heap->perm[b] = tmp;
-}
-
 Heap*
-new_heap(int length_max) {
+new_heap(int num_inserts) {
     Heap* heap = malloc(sizeof(Heap));
-    heap->length_max = length_max,
+    heap->num_inserts = num_inserts,
     heap->length = 0;
-    heap->data = malloc(length_max * sizeof(Event));
-    heap->perm = malloc(length_max * sizeof(int));
+    heap->buffer_pos = 0;
+    heap->data = malloc(num_inserts * sizeof(Event*));
+    heap->buffer = malloc(num_inserts * sizeof(Event));
     return heap;
 }
 
 void
 free_heap(Heap* heap) {
     free(heap->data);
-    free(heap->perm);
+    free(heap->buffer);
     free(heap);
 }
 
@@ -54,32 +41,38 @@ parent(int node) {
 }
 
 static inline int
-is_root(int node) {
-    return node == 0;
+less(int node1, int node2, Heap* heap) {
+    return compare_event(heap->data[node1], heap->data[node2]) < 0;
+}
+
+static inline void
+swap_nodes(int a, int b, Heap* heap) {
+    Event* tmp = heap->data[a];
+    heap->data[a] = heap->data[b];
+    heap->data[b] = tmp;
 }
 
 void
 heap_insert(Event event, Heap* heap) {
 
     // Check if valid call
-    assert(heap->length < heap->length_max);
+    assert(heap->buffer_pos < heap->num_inserts);
 
     // Add event as last child
-    heap->data[heap->length] = event;
-    heap->perm[heap->length] = heap->length;
-    heap->length++;
+    heap->buffer[heap->buffer_pos++] = event;
+    heap->data[heap->length++] = &heap->buffer[heap->buffer_pos - 1];
 
     // heapify up
-    int node = heap->length - 1;
-    while (!is_root(node) && less(node, parent(node), heap)) {
-        swap(node, parent(node), heap);
-        node = parent(node);
+    for (int node = heap->length - 1;
+            node != 0 && less(node, parent(node), heap);
+            node = parent(node)) {
+        swap_nodes(node, parent(node), heap);
     }
 }
 
 Event
 heap_get_top(Heap* heap) {
-    return heap->data[heap->perm[0]];
+    return *(heap->data[0]);
 }
 
 void
@@ -88,33 +81,42 @@ heap_pop(Heap* heap) {
     // Check if valid call
     assert(heap->length > 0);
 
-    // TODO: lol removing is not that easy
-    // actually I should use pointers instead of
-    // this perm bullcrap
-
     // Replace the root with the last leaf and delete the root
-    heap->data[0] = heap->data[heap->length - 1];
+    swap_nodes(0, heap->length - 1, heap);
     heap->length--;
 
     // Heapify down
-    for (int node = 0, min_child = left(node);
+    for (int node = 0, min_child;
             left(node) < heap->length;
             node = min_child) {
 
+        min_child = left(node);
         if (right(node) < heap->length &&
             less(right(node), left(node), heap)) {
             min_child = right(node);
         }
 
         if (less(min_child, node, heap)) {
-            swap(min_child, node, heap); 
+            swap_nodes(min_child, node, heap); 
         } else {
             break;
         }
     }
 }
 
-
+int
+heap_condition_satisfied(Heap* heap) {
+    int good = 1;
+    for (int i = 0; i < heap->length; i++) {
+        if (left(i) < heap->length && less(left(i), i, heap)) {
+            good = 0;
+        }
+        if (right(i) < heap->length && less(right(i), i, heap)) {
+            good = 0;
+        }
+    }
+    return good;
+}
 
 
 

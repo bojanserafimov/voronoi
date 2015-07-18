@@ -8,7 +8,7 @@ static State*
 // Creates a state and fills the event queue
 new_state(Inputs* inputs) {
     State* state = malloc(sizeof(State));
-    state->event_queue = malloc(sizeof(Heap));
+    state->event_queue = new_heap(100000);
     for (int i = 0; i < inputs->numSites; i++) {
         Event event = {
             .x = inputs->sites[i].x,
