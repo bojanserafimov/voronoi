@@ -14,8 +14,14 @@ static void null_test_success(void **state) {
 static void event_queue(void **state) {
     (void) state;
 
+    // How many events to test on
+    const int numevents = 1000000;
+
+    // Whether to perform a check that
+    // takes linear time to run
+    const int linear_time = 0;
+
     // Create random events
-    const int numevents = 10;
     Event events[numevents];
     for (int i = 0; i < numevents; i++) {
         events[i].x = rand();
@@ -34,6 +40,10 @@ static void event_queue(void **state) {
     for (int i = 0; i < numevents; i++) {
         assert_int_equal(heap->length, i);
         heap_insert(events[i], heap);
+
+        if (linear_time) {
+            assert_int_equal(heap_condition_satisfied(heap), 1);
+        }
     }
 
     // Pop elements and check order
@@ -41,9 +51,12 @@ static void event_queue(void **state) {
         assert_int_equal(heap->length, numevents - i);
         Event event = heap_get_top(heap);
         heap_pop(heap);
-        fprintf(stderr, "%d\t%d\n", event.x, sorted[i].x);
-        // assert_int_equal(event.x, sorted[i].x);
-        // assert_int_equal(event.y, sorted[i].y);
+
+        if (linear_time) {
+            assert_int_equal(heap_condition_satisfied(heap), 1);
+        }
+        assert_int_equal(event.x, sorted[i].x);
+        assert_int_equal(event.y, sorted[i].y);
     }
 
     // Free memory
