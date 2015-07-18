@@ -4,7 +4,8 @@
 ## Install GTK+
 
 First try `sudo apt-get install libgtk-3-dev`. 
-If it doesn't work, install from source
+If it doesn't work, install from source.
+Install GTK+ dependencies
 
 ```sh
 sudo apt-get install 'libglib2.0-dev'
@@ -14,6 +15,8 @@ sudo apt-get install 'libpango1.0*'
 sudo apt-get install 'fontconfig'
 sudo apt-get install 'libgdk-pixbuf2.0*'
 ```
+
+Install GTK+
 
 ```sh
 cd ~/Downloads
