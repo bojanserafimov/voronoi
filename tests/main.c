@@ -9,7 +9,8 @@ static void null_test_success(void **state) {
 }
 
 #include "heap.h"
-#include "stdlib.h"
+#include <stdlib.h>
+#include <stdio.h>
 static void event_queue(void **state) {
     (void) state;
 
@@ -26,7 +27,7 @@ static void event_queue(void **state) {
     for (int i = 0; i < numevents; i++) {
         sorted[i] = events[i];
     }
-    qsort(sorted, numevents, sizeof(Event), compare_heap);
+    qsort(sorted, numevents, sizeof(Event), compare_event);
 
     // Insert events into the heap, check the size
     Heap* heap = new_heap(numevents);
@@ -40,6 +41,7 @@ static void event_queue(void **state) {
         assert_int_equal(heap->length, numevents - i);
         Event event = heap_get_top(heap);
         heap_pop(heap);
+        fprintf(stderr, "%d\t%d\n", event.x, sorted[i].x);
         // assert_int_equal(event.x, sorted[i].x);
         // assert_int_equal(event.y, sorted[i].y);
     }

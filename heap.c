@@ -1,6 +1,6 @@
 #include "heap.h"
 
-int compare_heap(const void* a, const void* b) {
+int compare_event(const void* a, const void* b) {
     if (((Event*)a)->x != ((Event*)b)->x) {
         return ((Event*)a)->x - ((Event*)b)->x;
     }
@@ -79,7 +79,7 @@ heap_insert(Event event, Heap* heap) {
 
 Event
 heap_get_top(Heap* heap) {
-    return heap->data[0];
+    return heap->data[heap->perm[0]];
 }
 
 void
@@ -87,6 +87,10 @@ heap_pop(Heap* heap) {
 
     // Check if valid call
     assert(heap->length > 0);
+
+    // TODO: lol removing is not that easy
+    // actually I should use pointers instead of
+    // this perm bullcrap
 
     // Replace the root with the last leaf and delete the root
     heap->data[0] = heap->data[heap->length - 1];

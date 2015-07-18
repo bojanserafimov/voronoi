@@ -20,7 +20,7 @@ typedef struct {
 
 Heap* new_heap(int length_max);
 void free_heap(Heap* heap);
-int compare_heap(const void* a, const void* b);
+int compare_event(const void* a, const void* b);
 
 void heap_insert(Event element, Heap* heap);
 Event heap_get_top(Heap* heap);
