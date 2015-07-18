@@ -1,5 +1,12 @@
 #include "heap.h"
 
+int compare_heap(const void* a, const void* b) {
+    if (((Event*)a)->x != ((Event*)b)->x) {
+        return ((Event*)a)->x - ((Event*)b)->x;
+    }
+    return ((Event*)a)->y - ((Event*)b)->y;
+}
+
 static inline int 
 less(int a, int b, Heap* heap) {
     if (heap->data[heap->perm[a]].x < heap->data[heap->perm[b]].x) return 1;
@@ -85,19 +92,16 @@ heap_pop(Heap* heap) {
     heap->data[0] = heap->data[heap->length - 1];
     heap->length--;
 
-    // While the node has children
+    // Heapify down
     for (int node = 0, min_child = left(node);
             left(node) < heap->length;
             node = min_child) {
 
-        // Find the smaller child
-        int min_child = left(node);
         if (right(node) < heap->length &&
             less(right(node), left(node), heap)) {
             min_child = right(node);
         }
 
-        // If should, do a swap
         if (less(min_child, node, heap)) {
             swap(min_child, node, heap); 
         } else {

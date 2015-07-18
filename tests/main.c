@@ -9,10 +9,42 @@ static void null_test_success(void **state) {
 }
 
 #include "heap.h"
+#include "stdlib.h"
 static void event_queue(void **state) {
     (void) state;
 
-    Heap* heap = new_heap(10);
+    // Create random events
+    const int numevents = 10;
+    Event events[numevents];
+    for (int i = 0; i < numevents; i++) {
+        events[i].x = rand();
+        events[i].y = rand();
+    }
+
+    // Bubble sort
+    Event sorted[numevents];
+    for (int i = 0; i < numevents; i++) {
+        sorted[i] = events[i];
+    }
+    qsort(sorted, numevents, sizeof(Event), compare_heap);
+
+    // Insert events into the heap, check the size
+    Heap* heap = new_heap(numevents);
+    for (int i = 0; i < numevents; i++) {
+        assert_int_equal(heap->length, i);
+        heap_insert(events[i], heap);
+    }
+
+    // Pop elements and check order
+    for (int i = 0; i < numevents; i++) {
+        assert_int_equal(heap->length, numevents - i);
+        Event event = heap_get_top(heap);
+        heap_pop(heap);
+        // assert_int_equal(event.x, sorted[i].x);
+        // assert_int_equal(event.y, sorted[i].y);
+    }
+
+    // Free memory
     free_heap(heap);
 }
 
