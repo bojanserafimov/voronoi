@@ -11,10 +11,10 @@ all:: $(NAME)
 
 $(NAME): $(OBJECTS)
 	@mkdir -p $(PREFIX)
-	@$(CC) $(OBJECTS) -o $(PREFIX)/$(NAME) $(LDFLAGS)
+	@$(CC) $(OBJECTS) $(DEPENDENCIES) -o $(PREFIX)/$(NAME) $(LDFLAGS)
 
 $(OBJECTS): %.o: %.c
-	@$(CC) -c $(CFLAGS) $< -o $@ $(LDFLAGS)
+	$(CC) -c $(CFLAGS) $< -o $@ $(LDFLAGS)
 
 clean::
 	@rm -f $(CRUFT)
