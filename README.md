@@ -1,6 +1,10 @@
 
-Install GTK+ dependencies
--------------------------
+## Install dependenciess
+
+# Install GTK+
+
+First try `sudo apt-get install libgtk-3-dev`. 
+If it doesn't work, install from source
 
 ```sh
 sudo apt-get install 'libglib2.0-dev'
@@ -11,9 +15,6 @@ sudo apt-get install 'fontconfig'
 sudo apt-get install 'libgdk-pixbuf2.0*'
 ```
 
-Install GTK+
-------------
-
 ```sh
 cd ~/Downloads
 wget http://ftp.gnome.org/pub/gnome/sources/gtk+/3.10/gtk+-3.10.9.tar.xz
@@ -23,15 +24,9 @@ cd gtk+-3.10.9
 ./configure --prefix=/opt/gtk
 make
 sudo make install
-
-```
-or
-```sh
-sudo apt-get install libgtk-3-dev
 ```
 
-Install cmocka
---------------
+## Install cmocka
 
 ```sh
 cd ~/Downloads
