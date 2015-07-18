@@ -4,5 +4,6 @@ old*
 tmp*
 *.swp
 *.swo
+*.o
 *~
 .ycm_extra_conf*

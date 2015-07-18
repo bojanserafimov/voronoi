@@ -1,4 +1,5 @@
 NAME = test
+PREFIX = ../inst
 include ../common.mk
 
 LDFLAGS += -lcmocka

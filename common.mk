@@ -10,7 +10,8 @@ CRUFT = $(OBJECTS) + $(NAME)
 all:: $(NAME)
 
 $(NAME): $(OBJECTS)
-	@$(CC) $(OBJECTS) -o $(NAME) $(LDFLAGS)
+	@mkdir -p $(PREFIX)
+	@$(CC) $(OBJECTS) -o $(PREFIX)/$(NAME) $(LDFLAGS)
 
 $(OBJECTS): %.o: %.c
 	@$(CC) -c $(CFLAGS) $< -o $@ $(LDFLAGS)
