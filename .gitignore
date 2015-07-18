@@ -1,0 +1,8 @@
+inst/
+bak*
+old*
+tmp*
+*.swp
+*.swo
+*~
+.ycm_extra_conf*
