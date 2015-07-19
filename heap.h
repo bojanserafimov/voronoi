@@ -6,9 +6,15 @@
 #include "assert.h"
 #include "stdio.h"
 
+typedef enum {
+    SITE_EVENT,
+    CIRCLE_EVENT
+} EventType;
+
 typedef struct {
-    int x;
-    int y;
+    double x;
+    double y;
+    EventType type;
 } Event;
 
 typedef struct {
